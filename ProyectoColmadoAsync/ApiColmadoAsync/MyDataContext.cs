@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ApiColmadoAsync.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiColmadoAsync
 {
@@ -8,5 +9,7 @@ namespace ApiColmadoAsync
         {
 
         }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
