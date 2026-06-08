@@ -19,6 +19,11 @@ namespace ApiColmadoAsync.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCategory(CategoryDto dto)
         {
+            var exit = await _context.Categories.AnyAsync(p => p.CategoryName.ToLower() == dto.CategoryName);
+            if (exit)
+            {
+                return BadRequest("El producto digitado ya existe en la base de datos");
+            }
             var newCategory = new Category
             {
                 CategoryName = dto.CategoryName,
@@ -63,7 +68,7 @@ namespace ApiColmadoAsync.Controllers
                 return NotFound(new { message = "La categoria no existe en la base de datos" });
             }
             return Ok(category);
-        }
+        }       
         [HttpGet("NoDelete")]
         public async Task<ActionResult> GetCategoryNoDelete()
         {
@@ -97,7 +102,7 @@ namespace ApiColmadoAsync.Controllers
                 return NotFound(new { message = $"El Id {id} no existe en la base de datos" });
             }
             _context.Categories.Remove(category);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
         [HttpDelete]
@@ -113,5 +118,6 @@ namespace ApiColmadoAsync.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = "El producto fue borrado correctamente" });
         }
+        
     }
 }
